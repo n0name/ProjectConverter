@@ -1,6 +1,5 @@
 """
 Models what a project looks like
-and general methods for loading/parsing
 """
 
 
@@ -20,15 +19,3 @@ class IIPR(object):
     """
     files = []
     parameters = {}
-
-
-class IProjectParser(object):
-    """
-        Interface for project parsers
-    """
-
-    def load_project(self, file_name):
-        raise NotImplementedError()
-
-    def parse_data(self):
-        raise NotImplementedError()

@@ -1,8 +1,8 @@
-from VCSProjectParser import VCSProjectParser
+from Importers.VCSProjectImporter import VCSProjectImporter
 
 
 def main():
-    parser = VCSProjectParser()
+    parser = VCSProjectImporter()
     parser.load_project(r'C:/work/OWLNext_git/VS10/OWLNext_10.vcxproj')
     parser.parse_data()
     if parser.parse_data():

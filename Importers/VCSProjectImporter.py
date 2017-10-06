@@ -1,7 +1,8 @@
-from IProjectParser import *
-
-import re
 import xml.etree.ElementTree as ET
+
+from Base.Common import *
+
+from Base.IProjectLoader import *
 
 
 def _find_rec(node, element, result):
@@ -12,7 +13,7 @@ def _find_rec(node, element, result):
     return result
 
 
-class VCSProjectParser(IProjectParser):
+class VCSProjectImporter(IProjectLoader):
     def __init__(self):
         self.project_name = ""
         self.iipr = None
@@ -25,16 +26,15 @@ class VCSProjectParser(IProjectParser):
         if node is None:
             return
         for child in node:
-            print('\t'*tabs, child.tag, child.attrib)
-            self._debug_print_node(child, tabs+1)
+            print('\t' * tabs, child.tag, child.attrib)
+            self._debug_print_node(child, tabs + 1)
 
-    def _debug_print_data(self ):
+    def _debug_print_data(self):
         et = ET.parse(self.project_name)
         if et is None:
             return
 
         self._debug_print_node(et.getroot())
-
 
     def parse_data(self):
         et = ET.parse(self.project_name)
