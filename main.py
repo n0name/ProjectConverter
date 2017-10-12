@@ -7,7 +7,7 @@ def main():
     parser.parse_data()
     if parser.parse_data():
         for f in parser.iipr.files:
-            print(f.attrib['type'],':', f.path)
+            print(f.attrib['type'], ':', f.path)
 
 
 if __name__ == '__main__':

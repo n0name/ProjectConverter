@@ -1,3 +1,6 @@
+"""
+Visual Studio .vcproj importer
+"""
 import xml.etree.ElementTree as ET
 
 from Base.Common import *
@@ -34,7 +37,11 @@ class VCSProjectImporter(IProjectLoader):
         if et is None:
             return
 
-        self._debug_print_node(et.getroot())
+        root = et.getroot()
+        for child in root:
+            print(child.tag, child.attrib)
+
+        # self._debug_print_node(et.getroot())
 
     def parse_data(self):
         et = ET.parse(self.project_name)
