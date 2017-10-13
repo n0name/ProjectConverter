@@ -13,9 +13,19 @@ class File(object):
         self.attrib = kwargs
 
 
+class Configuration(object):
+    """
+        Represents project configuration
+    """
+    def __init__(self, name, **kwargs):
+        self.name = name
+        self.params = kwargs
+
+
 class IIPR(object):
     """
         IDE Independent Project Representation
     """
+    configurations = []
     files = []
     parameters = {}

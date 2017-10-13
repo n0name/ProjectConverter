@@ -41,22 +41,44 @@ class VCSProjectImporter(IProjectLoader):
         for child in root:
             print(child.tag, child.attrib)
 
-        # self._debug_print_node(et.getroot())
+    def _parse_sources(self, root):
+        # Find all the source files
+        for item in _find_rec(root, 'ClCompile', []):
+            if 'Include' in item.attrib:
+                file_name = item.attrib['Include']
+                exclude_from = []
+                for child in item:
+                    if "ExcludedFromBuild" in child.tag:
+                        exclude_from.append(child.attrib['Condition'])
+
+                self.iipr.files.append(File(file_name, type='source', exclude_from=exclude_from))
+
+    def _parse_headers(self, root):
+        # Find all the include files
+        for item in _find_rec(root, 'ClInclude', []):
+            if 'Include' in item.attrib:
+                self.iipr.files.append(File(item.attrib['Include'], type='include'))
+
+    def _parse_configurations(self, root):
+        # Find all the build configurations
+        for item in _find_rec(root, 'ProjectConfiguration', []):
+            if 'Include' in item.attrib:
+                config_name = item.attrib['Include']
+                params_dict = {}
+                for child in item:
+                    params_dict.update({child.tag: child.text})
+
+                self.iipr.configurations.append(Configuration(config_name, **params_dict))
 
     def parse_data(self):
         et = ET.parse(self.project_name)
         if et is None:
             return False
         root = et.getroot()
-        iipr = IIPR()
-        for item in _find_rec(root, 'ClCompile', []):
-            if 'Include' in item.attrib:
-                iipr.files.append(File(item.attrib['Include'], type='source'))
+        self.iipr = IIPR()
 
-        for item in _find_rec(root, 'ClInclude', []):
-            if 'Include' in item.attrib:
-                iipr.files.append(File(item.attrib['Include'], type='include'))
-
-        self.iipr = iipr
+        self._parse_sources(root)
+        self._parse_headers(root)
+        self._parse_configurations(root)
 
         return True
