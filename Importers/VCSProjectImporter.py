@@ -70,6 +70,11 @@ class VCSProjectImporter(IProjectLoader):
 
                 self.iipr.configurations.append(Configuration(config_name, **params_dict))
 
+    # def _parse_property_groups(self, root):
+    #     # Find all the property groups
+    #     for item in _find_rec(root, 'PropertyGroup', []):
+    #         if "Label" in item.attrib:
+
     def parse_data(self):
         et = ET.parse(self.project_name)
         if et is None:
